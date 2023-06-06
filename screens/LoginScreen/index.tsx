@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import {
   useNavigation
@@ -26,12 +26,17 @@ export default function LoginScreen() {
 
   const navigation = useNavigation();
 
-  const buttonDisabled = () => {
+  const onLogin = () => navigation.navigate('List' as never, { name: user.username } as never);
+
+  const buttonDisabled = useMemo(() => {
     if (user.username.length === 0 || user.password.length === 0) {
       return true;
     }
     return false;
-  };
+  }, [user]);
+  const onChangeForm = (key: keyof IUser, value: string) => {
+    setUser({...user, [key]: value});
+  }
 
   return (
     <Main>
@@ -41,9 +46,7 @@ export default function LoginScreen() {
           placeholder="Digite Seu Nome De Usuario"
           placeholderTextColor="white"
           value={user.username}
-          onChangeText={usernameText =>
-            setUser({...user, username: usernameText})
-          }
+          onChangeText={usernameText => onChangeForm('username', usernameText)}
           maxLength={30}
         />
         <UserInput
@@ -51,14 +54,12 @@ export default function LoginScreen() {
           placeholderTextColor="white"
           keyboardType="numeric"
           value={user.password}
-          onChangeText={passwordText =>
-            setUser({...user, password: passwordText})
-          }
+          onChangeText={passwordText => onChangeForm('password', passwordText)}
         />
         <LoginButton
           activeOpacity={1}
-          disabled={buttonDisabled()}
-          onPress={() => navigation.navigate('List' as never, { name: user.username } as never)}>
+          disabled={buttonDisabled}
+          onPress={onLogin}>
           <Text>Login</Text>
         </LoginButton>
       </Container>

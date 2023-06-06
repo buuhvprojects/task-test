@@ -1,8 +1,8 @@
 import React from 'react';
 import {NavigationContainer, ParamListBase} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import LoginScreen from './screens/LoginScreen/App';
-import ListScreen from './screens/ListScreen/App';
+import LoginScreen from './screens/LoginScreen';
+import ListScreen from './screens/ListScreen';
 
 
 
@@ -22,7 +22,9 @@ export default function App() {
         <Stack.Screen
           name="List"
           component={ListScreen}
-          options={({route}) => ({title: route.params.name})}
+          options={({route}) => ({title: (route.params as {
+            name: string;
+          }).name})}
         />
       </Stack.Navigator>
     </NavigationContainer>

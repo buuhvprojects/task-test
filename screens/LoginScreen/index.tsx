@@ -1,24 +1,30 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
+import {
+  useNavigation
+} from '@react-navigation/native';
+import { Text } from 'react-native';
 import {
   Container,
   LoginButton,
   Main,
   Title,
   UserInput,
-} from '../../public/LoginScreenStyles';
-import {Text} from 'react-native';
+} from './LoginScreenStyles';
 
 interface IUser {
   username: string;
   password: string;
 }
 
-export default function LoginScreen({ navigation }) {
+
+export default function LoginScreen() {
   const [user, setUser] = useState<IUser>({
     username: '',
     password: '',
   });
+
+  const navigation = useNavigation();
 
   const buttonDisabled = () => {
     if (user.username.length === 0 || user.password.length === 0) {
@@ -52,7 +58,7 @@ export default function LoginScreen({ navigation }) {
         <LoginButton
           activeOpacity={1}
           disabled={buttonDisabled()}
-          onPress={() => navigation.navigate('List', { name: user.username })}>
+          onPress={() => navigation.navigate('List' as never, { name: user.username } as never)}>
           <Text>Login</Text>
         </LoginButton>
       </Container>

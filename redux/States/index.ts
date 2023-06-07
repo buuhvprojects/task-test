@@ -4,10 +4,10 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface TodoState {
     username: string;
-    todos: [{ checked: boolean, text: string }];
+    todos: { checked: boolean, text: string }[];
 }
 
-const initialState: TodoState = { username: '', todos: [{ checked: false, text: '' }] }
+const initialState: TodoState = { username: '', todos: [] }
 
 export const todoSlice = createSlice({
     name: 'todo',

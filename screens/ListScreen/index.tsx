@@ -22,8 +22,6 @@ interface ITodo {
 export default function ListScreen() {
   const dispatch = useDispatch();
 
-  const [todos, setTodos] = useState<ITodo[]>([]);
-
   const todoList = useSelector((state: RootState) => state.todo.todos);
 
   const [todoValues, setTodoValues] = useState({
@@ -33,15 +31,7 @@ export default function ListScreen() {
 
   function addTodo() {
     if (todoValues.todoText.trim() !== '') {
-      const newTodos = [
-        ...todos,
-        {text: todoValues.todoText, checked: todoValues.checked},
-      ];
-      setTodos(newTodos);
-
-      newTodos.map(todo => {
-        dispatch(incrementTodoList(todo.text));
-      });
+      dispatch(incrementTodoList(todoValues.todoText));
     }
   }
 

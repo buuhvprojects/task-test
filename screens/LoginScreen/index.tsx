@@ -1,42 +1,36 @@
-import React, { useMemo, useState } from 'react';
+import React, {useState} from 'react';
 
-import {
-  useNavigation
-} from '@react-navigation/native';
-import { Text } from 'react-native';
 import {
   Container,
   LoginButton,
   Main,
   Title,
   UserInput,
-} from './LoginScreenStyles';
+} from './components';
+import {Text} from 'react-native';
+import { useDispatch } from 'react-redux';
+import { incrementUser } from '../../redux/States';
 
 interface IUser {
   username: string;
   password: string;
 }
 
+export default function LoginScreen({ navigation }: any) {
 
-export default function LoginScreen() {
+  const dispatch = useDispatch()
+  
   const [user, setUser] = useState<IUser>({
     username: '',
     password: '',
   });
 
-  const navigation = useNavigation();
-
-  const onLogin = () => navigation.navigate('List' as never, { name: user.username } as never);
-
-  const buttonDisabled = useMemo(() => {
-    if (user.username.length === 0 || user.password.length === 0) {
+  const buttonDisabled = () => {
+    if (user.username.trim() === '' || user.password.trim() === ''){
       return true;
     }
     return false;
-  }, [user]);
-  const onChangeForm = (key: keyof IUser, value: string) => {
-    setUser({...user, [key]: value});
-  }
+  };
 
   return (
     <Main>
@@ -46,20 +40,23 @@ export default function LoginScreen() {
           placeholder="Digite Seu Nome De Usuario"
           placeholderTextColor="white"
           value={user.username}
-          onChangeText={usernameText => onChangeForm('username', usernameText)}
+          onChangeText={usernameText =>
+            setUser({...user, username: usernameText})
+          }
           maxLength={30}
         />
         <UserInput
           placeholder="Digite Sua Senha"
           placeholderTextColor="white"
-          keyboardType="numeric"
           value={user.password}
-          onChangeText={passwordText => onChangeForm('password', passwordText)}
+          onChangeText={passwordText =>
+            setUser({...user, password: passwordText})
+          }
         />
         <LoginButton
           activeOpacity={1}
-          disabled={buttonDisabled}
-          onPress={onLogin}>
+          disabled={buttonDisabled()}
+          onPress={() => navigation.navigate('List', dispatch(incrementUser(user.username)))}>
           <Text>Login</Text>
         </LoginButton>
       </Container>
